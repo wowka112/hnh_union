@@ -90,6 +90,9 @@ public class Cal extends SSWidget {
     }
 
     public Object tooltip(Coord c, boolean again) {
+        if (!Config.showDayTime) {
+            return null;
+        }
         return ttip;
     }
 }
