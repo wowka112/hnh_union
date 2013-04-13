@@ -26,89 +26,93 @@
 
 package haven.resutil;
 
-import haven.*;
+import haven.Coord;
+import haven.GOut;
+import haven.Resource;
+import haven.Sprite;
 
 public abstract class BollSprite extends Sprite {
     public Boll bollar = null;
-    
-    public abstract static class Boll extends Part {
-	private Boll n, p;
-	public double x, y, z;
-	
-	public Boll(int pz, int subz, double x, double y, double z) {
-	    super(pz, subz);
-	    this.x = x;
-	    this.y = y;
-	    this.z = z;
-	}
-	
-	public Boll(double x, double y, double z) {
-	    this(0, 0, x, y, z);
-	}
-	
-	public Boll() {
-	    this(0, 0, 0, 0, 0);
-	}
-	
-	public abstract boolean tick(int dt);
-	public abstract void draw(GOut g, Coord sc);
-	
-	public void setup(Coord cc, Coord off) {
-	    super.setup(cc.add((int)((x * 2) - (y * 2)), (int)(x + y)), off.add(0, (int)z));
-	}
 
-	public void draw(GOut g) {
-	    draw(g, sc());
-	}
-	
-	public void draw(java.awt.image.BufferedImage img, java.awt.Graphics g) {
-	}
+    public abstract static class Boll extends Part {
+        private Boll n, p;
+        public double x, y, z;
+
+        public Boll(int pz, int subz, double x, double y, double z) {
+            super(pz, subz);
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public Boll(double x, double y, double z) {
+            this(0, 0, x, y, z);
+        }
+
+        public Boll() {
+            this(0, 0, 0, 0, 0);
+        }
+
+        public abstract boolean tick(int dt);
+
+        public abstract void draw(GOut g, Coord sc);
+
+        public void setup(Coord cc, Coord off) {
+            super.setup(cc.add((int) ((x * 2) - (y * 2)), (int) (x + y)), off.add(0, (int) z));
+        }
+
+        public void draw(GOut g) {
+            draw(g, sc());
+        }
+
+        public void draw(java.awt.image.BufferedImage img, java.awt.Graphics g) {
+        }
     }
-    
+
     protected BollSprite(Owner owner, Resource res) {
-	super(owner, res);
+        super(owner, res);
     }
-    
+
     public void add(Boll boll) {
-	if(bollar != null)
-	    bollar.p = boll;
-	boll.n = bollar;
-	bollar = boll;
+        if (bollar != null)
+            bollar.p = boll;
+        boll.n = bollar;
+        bollar = boll;
     }
-    
+
     public void remove(Boll boll) {
-	if(boll.n != null)
-	    boll.n.p = boll.p;
-	if(boll.p != null)
-	    boll.p.n = boll.n;
-	if(boll == bollar)
-	    bollar = boll.n;
+        if (boll.n != null)
+            boll.n.p = boll.p;
+        if (boll.p != null)
+            boll.p.n = boll.n;
+        if (boll == bollar)
+            bollar = boll.n;
     }
-    
+
     public abstract boolean tick2(int dt);
-    
+
     public boolean tick(int dt) {
-	Boll n;
-	for(Boll boll = bollar; boll != null; boll = n) {
-	    n = boll.n;
-	    if(boll.tick(dt))
-		remove(boll);
-	}
-	return(tick2(dt));
+        Boll n;
+        for (Boll boll = bollar; boll != null; boll = n) {
+            n = boll.n;
+            if (boll.tick(dt))
+                remove(boll);
+        }
+        return (tick2(dt));
     }
-    
+
     public boolean checkhit(Coord c) {
-	return(false);
+        return (false);
     }
-    
+
     public void setup(Drawer d, Coord cc, Coord off) {
-	for(Boll boll = bollar; boll != null; boll = boll.n) {
-	    boll.setup(cc, off);
-	    d.addpart(boll);
-	}
+        for (Boll boll = bollar; boll != null; boll = boll.n) {
+            boll.setup(cc, off);
+            d.addpart(boll);
+        }
     }
 
     public Object stateid() {
-	return(this);
+        return (this);
     }
 }

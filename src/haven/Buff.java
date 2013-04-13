@@ -26,55 +26,55 @@
 
 package haven;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Buff {
-	public static final Text.Foundry nfnd = new Text.Foundry("SansSerif", 10);
-	int id;
-	Indir<Resource> res;
-	String tt = null;
-	public int ameter = -1;
-	int nmeter = -1;
-	int cmeter = -1;
-	int cticks = -1;
-	long gettime;
-	Tex ntext = null;
-	boolean major = false;
+    public static final Text.Foundry nfnd = new Text.Foundry("SansSerif", 10);
+    int id;
+    Indir<Resource> res;
+    String tt = null;
+    public int ameter = -1;
+    int nmeter = -1;
+    int cmeter = -1;
+    int cticks = -1;
+    long gettime;
+    Tex ntext = null;
+    boolean major = false;
 
-	public Buff(int id, Indir<Resource> res) {
-		this.id = id;
-		this.res = res;
-	}
+    public Buff(int id, Indir<Resource> res) {
+        this.id = id;
+        this.res = res;
+    }
 
-	Tex nmeter() {
-		if (ntext == null)
-			ntext = new TexI(Utils.outline2(
-					nfnd.render(Integer.toString(nmeter), Color.WHITE).img,
-					Color.BLACK));
-		return (ntext);
-	}
+    Tex nmeter() {
+        if (ntext == null)
+            ntext = new TexI(Utils.outline2(
+                    nfnd.render(Integer.toString(nmeter), Color.WHITE).img,
+                    Color.BLACK));
+        return (ntext);
+    }
 
-	public String GetName() {
-		Resource.Tooltip tt;
-		if ((res.get() != null)
-				&& ((tt = res.get().layer(Resource.tooltip)) != null))
-			return tt.t;
-		else
-			return "";
-	}
+    public String GetName() {
+        Resource.Tooltip tt;
+        if ((res.get() != null)
+                && ((tt = res.get().layer(Resource.tooltip)) != null))
+            return tt.t;
+        else
+            return "";
+    }
 
-	// �������� ����� �� ����� ���� �� 0 �� 100
-	public int GetTimeLeft() {
-		if (cmeter >= 0) {
-			long now = System.currentTimeMillis();
-			double m = cmeter / 100.0;
-			if (cticks >= 0) {
-				double ot = cticks * 0.06;
-				double pt = ((double) (now - gettime)) / 1000.0;
-				m *= (ot - pt) / ot;
-			}
-			return (int) Math.round(m * 100);
-		}
-		return 0;
-	}
+    // �������� ����� �� ����� ���� �� 0 �� 100
+    public int GetTimeLeft() {
+        if (cmeter >= 0) {
+            long now = System.currentTimeMillis();
+            double m = cmeter / 100.0;
+            if (cticks >= 0) {
+                double ot = cticks * 0.06;
+                double pt = ((double) (now - gettime)) / 1000.0;
+                m *= (ot - pt) / ot;
+            }
+            return (int) Math.round(m * 100);
+        }
+        return 0;
+    }
 }

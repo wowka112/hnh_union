@@ -27,23 +27,24 @@
 package haven;
 
 public class Chatwindow extends ChatHW {
-	
+
     static {
-	Widget.addtype("chat", new WidgetFactory() {
-		public Widget create(Coord c, Widget parent, Object[] args) {
-		    return(new Chatwindow(c, (Coord)args[0], parent));
-		}
-	    });
+        Widget.addtype("chat", new WidgetFactory() {
+            public Widget create(Coord c, Widget parent, Object[] args) {
+                return (new Chatwindow(c, (Coord) args[0], parent));
+            }
+        });
     }
-	
+
     public Chatwindow(Coord c, Coord sz, Widget parent) {
-	super(parent,"Global",true);
+        super(parent, "Global", true);
     }
+
     public void uimsg(String msg, Object... args) {
-	if(msg == "log") {
-	    makeurgent(1);
-	} 
-	super.uimsg(msg, args);
+        if (msg == "log") {
+            makeurgent(1);
+        }
+        super.uimsg(msg, args);
     }
-    
+
 }

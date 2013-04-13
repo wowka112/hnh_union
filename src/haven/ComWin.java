@@ -26,69 +26,69 @@
 
 package haven;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ComWin extends HWindow {
-	static Tex iptex = Resource.loadtex("gfx/hud/combat/ip");
-	Fightview fv;
+    static Tex iptex = Resource.loadtex("gfx/hud/combat/ip");
+    Fightview fv;
 
-	public ComWin(Widget parent, Fightview fv) {
-		super(parent, "Combat", false);
-		this.fv = fv;
-		(new Label(new Coord(10, 5), this, "Attack:")).setcolor(Color.BLACK);
-		new Label(new Coord(10, 55), this, "Maneuver:").setcolor(Color.BLACK);
-	}
+    public ComWin(Widget parent, Fightview fv) {
+        super(parent, "Combat", false);
+        this.fv = fv;
+        (new Label(new Coord(10, 5), this, "Attack:")).setcolor(Color.BLACK);
+        new Label(new Coord(10, 55), this, "Maneuver:").setcolor(Color.BLACK);
+    }
 
-	public void draw(GOut g) {
-		super.draw(g);
-		Resource res;
-		boolean hasbatk = (fv.current_attack != null) && (fv.current_attack.get() != null);
-		boolean hasiatk = (fv.next_attack != null) && (fv.next_attack.get() != null);
-		if (hasbatk) {
-			res = fv.current_attack.get();
-			g.image(res.layer(Resource.imgc).tex(), new Coord(15, 20));
-			if (!hasiatk) {
-				g.chcolor(0, 0, 0, 255);
-				g.atext(res.layer(Resource.action).name, new Coord(50, 35), 0, 0.5);
-				g.chcolor();
-			}
-		}
-		if (hasiatk) {
-			res = fv.next_attack.get();
-			Coord c;
-			if (hasbatk)
-				c = new Coord(18, 23);
-			else
-				c = new Coord(15, 20);
-			g.image(res.layer(Resource.imgc).tex(), c);
-			g.chcolor(0, 0, 0, 255);
-			g.atext(res.layer(Resource.action).name, new Coord(50, 35), 0, 0.5);
-			g.chcolor();
-		}
-		if ((fv.maneuver != null) && ((res = fv.maneuver.get()) != null)) {
-			g.image(res.layer(Resource.imgc).tex(), new Coord(15, 70));
-			g.chcolor(0, 0, 0, 255);
-			Resource.AButton act = res.layer(Resource.action);
-			String name = "";
-			if (act != null) {
-				name = act.name;
-			}
-			g.atext(name, new Coord(50, 85), 0, 0.5);
-			g.chcolor();
-		}
-		g.image(iptex, new Coord(200, 32));
-		Fightview.Relation rel = fv.current;
-		if (rel != null) {
-			g.chcolor(0, 0, 0, 255);
-			g.text(rel.initiative_points_self + "/" + rel.initiative_points_other, new Coord(205 + iptex.sz().x, 30));
-			g.chcolor();
-		}
-		long now = System.currentTimeMillis();
-		if (now < fv.next_attack_time) {
-			g.chcolor(255, 0, 128, 255);
-			g.frect(new Coord(200, 55), new Coord((int) (fv.next_attack_time - now) / 100,
-					20));
-			g.chcolor();
-		}
-	}
+    public void draw(GOut g) {
+        super.draw(g);
+        Resource res;
+        boolean hasbatk = (fv.current_attack != null) && (fv.current_attack.get() != null);
+        boolean hasiatk = (fv.next_attack != null) && (fv.next_attack.get() != null);
+        if (hasbatk) {
+            res = fv.current_attack.get();
+            g.image(res.layer(Resource.imgc).tex(), new Coord(15, 20));
+            if (!hasiatk) {
+                g.chcolor(0, 0, 0, 255);
+                g.atext(res.layer(Resource.action).name, new Coord(50, 35), 0, 0.5);
+                g.chcolor();
+            }
+        }
+        if (hasiatk) {
+            res = fv.next_attack.get();
+            Coord c;
+            if (hasbatk)
+                c = new Coord(18, 23);
+            else
+                c = new Coord(15, 20);
+            g.image(res.layer(Resource.imgc).tex(), c);
+            g.chcolor(0, 0, 0, 255);
+            g.atext(res.layer(Resource.action).name, new Coord(50, 35), 0, 0.5);
+            g.chcolor();
+        }
+        if ((fv.maneuver != null) && ((res = fv.maneuver.get()) != null)) {
+            g.image(res.layer(Resource.imgc).tex(), new Coord(15, 70));
+            g.chcolor(0, 0, 0, 255);
+            Resource.AButton act = res.layer(Resource.action);
+            String name = "";
+            if (act != null) {
+                name = act.name;
+            }
+            g.atext(name, new Coord(50, 85), 0, 0.5);
+            g.chcolor();
+        }
+        g.image(iptex, new Coord(200, 32));
+        Fightview.Relation rel = fv.current;
+        if (rel != null) {
+            g.chcolor(0, 0, 0, 255);
+            g.text(rel.initiative_points_self + "/" + rel.initiative_points_other, new Coord(205 + iptex.sz().x, 30));
+            g.chcolor();
+        }
+        long now = System.currentTimeMillis();
+        if (now < fv.next_attack_time) {
+            g.chcolor(255, 0, 128, 255);
+            g.frect(new Coord(200, 55), new Coord((int) (fv.next_attack_time - now) / 100,
+                    20));
+            g.chcolor();
+        }
+    }
 }

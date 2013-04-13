@@ -1,4 +1,5 @@
 package union.jsbot;
+
 /*
 import static haven.MCache.tileSize;
 import haven.Coord;
@@ -7,8 +8,8 @@ import union.APXUtils;
 import union.JSBotUtils;
 */
 public class JSMap {
-	public JSMap() {
-	}
+    public JSMap() {
+    }
 //
 //	/**
 //	 * Возвращает массив идентификаторов объектов в указанном радиусе с

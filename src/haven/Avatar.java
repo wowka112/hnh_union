@@ -30,40 +30,40 @@ import java.util.List;
 
 public class Avatar extends GAttrib {
     public AvaRender rend = null;
-        
+
     public Avatar(Gob gob) {
-	super(gob);
+        super(gob);
     }
-    
+
     public boolean isPlayer() {
-    	if (rend != null) {
-    		return (rend.hasImage("kritter") == false);
-    	} else return false;
+        if (rend != null) {
+            return (rend.hasImage("kritter") == false);
+        } else return false;
     }
-    
+
     public String Dump() {
-    	if (rend != null) {
-    		return rend.Dump();
-    	}
-    	return "";
+        if (rend != null) {
+            return rend.Dump();
+        }
+        return "";
     }
-    
+
     public boolean isCarrying() {
-    	if (rend != null) {
-    		return (rend.hasImage("arm/carrying") == true);
-    	} else return false;
+        if (rend != null) {
+            return (rend.hasImage("arm/carrying") == true);
+        } else return false;
     }
-    
+
     public boolean isSitting() {
-    	if (rend != null) {
-    		return (rend.hasImage("body/sitting") == true);
-    	} else return false;
+        if (rend != null) {
+            return (rend.hasImage("body/sitting") == true);
+        } else return false;
     }
-	
+
     void setlayers(List<Indir<Resource>> layers) {
-	if(rend == null)
-	    rend = new AvaRender(layers);
-	else
-	    rend.setlay(layers);
+        if (rend == null)
+            rend = new AvaRender(layers);
+        else
+            rend.setlay(layers);
     }
 }

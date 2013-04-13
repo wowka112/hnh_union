@@ -26,121 +26,121 @@
 
 package haven;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Speedget extends Widget {
-	public static final Tex imgs[][];
-	public static final Coord tsz;
-	public static final Color pspdc = new Color(160, 255, 160);
-	private int cur, max, pspd;
-	int oldx, newx;
+    public static final Tex imgs[][];
+    public static final Coord tsz;
+    public static final Color pspdc = new Color(160, 255, 160);
+    private int cur, max, pspd;
+    int oldx, newx;
 
-	static {
-		imgs = new Tex[4][3];
-		String[] names = { "crawl", "walk", "run", "sprint" };
-		String[] vars = { "dis", "off", "on" };
-		int w = 0;
-		for (int i = 0; i < 4; i++) {
-			for (int o = 0; o < 3; o++)
-				imgs[i][o] = Resource.loadtex("gfx/hud/meter/rmeter/"
-						+ names[i] + "-" + vars[o]);
-			w += imgs[i][0].sz().x;
-		}
-		tsz = new Coord(w, imgs[0][0].sz().y);
+    static {
+        imgs = new Tex[4][3];
+        String[] names = {"crawl", "walk", "run", "sprint"};
+        String[] vars = {"dis", "off", "on"};
+        int w = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int o = 0; o < 3; o++)
+                imgs[i][o] = Resource.loadtex("gfx/hud/meter/rmeter/"
+                        + names[i] + "-" + vars[o]);
+            w += imgs[i][0].sz().x;
+        }
+        tsz = new Coord(w, imgs[0][0].sz().y);
 
-		Widget.addtype("speedget", new WidgetFactory() {
-			public Widget create(Coord c, Widget parent, Object[] args) {
-				int cur = (Integer) args[0];
-				int max = (Integer) args[1];
-				return (new Speedget(c, parent, cur, max));
-			}
-		});
-	}
+        Widget.addtype("speedget", new WidgetFactory() {
+            public Widget create(Coord c, Widget parent, Object[] args) {
+                int cur = (Integer) args[0];
+                int max = (Integer) args[1];
+                return (new Speedget(c, parent, cur, max));
+            }
+        });
+    }
 
-	public Speedget(Coord c, Widget parent, int cur, int max) {
-		super(c, tsz, parent);
-		pspd = this.cur = cur;
-		this.max = max;
-		ui.speedget = this;
-		oldx = c.x;
-		newx = c.x - 95;
-	}
+    public Speedget(Coord c, Widget parent, int cur, int max) {
+        super(c, tsz, parent);
+        pspd = this.cur = cur;
+        this.max = max;
+        ui.speedget = this;
+        oldx = c.x;
+        newx = c.x - 95;
+    }
 
-	public void draw(GOut g) {
-		if(!Config.showMyAvatar)
-			this.c.x = newx;
-		else
-			this.c.x = oldx;
-		int x = 0;
-		for (int i = 0; i < 4; i++) {
-			Tex t;
-			if (i == pspd) {
-				g.chcolor(pspdc);
-			} else {
-				g.chcolor();
-			}
-			if (i == cur)
-				t = imgs[i][2];
-			else if (i > max)
-				t = imgs[i][0];
-			else
-				t = imgs[i][1];
-			g.image(t, new Coord(x, 0));
-			x += t.sz().x;
-		}
-	}
+    public void draw(GOut g) {
+        if (!Config.showMyAvatar)
+            this.c.x = newx;
+        else
+            this.c.x = oldx;
+        int x = 0;
+        for (int i = 0; i < 4; i++) {
+            Tex t;
+            if (i == pspd) {
+                g.chcolor(pspdc);
+            } else {
+                g.chcolor();
+            }
+            if (i == cur)
+                t = imgs[i][2];
+            else if (i > max)
+                t = imgs[i][0];
+            else
+                t = imgs[i][1];
+            g.image(t, new Coord(x, 0));
+            x += t.sz().x;
+        }
+    }
 
-	public void uimsg(String msg, Object... args) {
-		if (msg == "cur")
-			cur = (Integer) args[0];
-		else if (msg == "max") {
-			max = (Integer) args[0];
-			if ((max > cur) && (cur < pspd)) {
-				setspeed(Math.min(pspd, max), false);
-			}
-		}
-	}
+    public void uimsg(String msg, Object... args) {
+        if (msg == "cur")
+            cur = (Integer) args[0];
+        else if (msg == "max") {
+            max = (Integer) args[0];
+            if ((max > cur) && (cur < pspd)) {
+                setspeed(Math.min(pspd, max), false);
+            }
+        }
+    }
 
-	public boolean mousedown(Coord c, int button) {
-		int x = 0;
-		for (int i = 0; i < 4; i++) {
-			x += imgs[i][0].sz().x;
-			if (c.x < x) {
-				setspeed(i, true);
-				break;
-			}
-		}
-		return (true);
-	}
+    public boolean mousedown(Coord c, int button) {
+        int x = 0;
+        for (int i = 0; i < 4; i++) {
+            x += imgs[i][0].sz().x;
+            if (c.x < x) {
+                setspeed(i, true);
+                break;
+            }
+        }
+        return (true);
+    }
 
-	public void setspeed(int speed, boolean player) {
-		wdgmsg("set", speed);
-		if (player) {
-			pspd = speed;
-		}
-	}
+    public void setspeed(int speed, boolean player) {
+        wdgmsg("set", speed);
+        if (player) {
+            pspd = speed;
+        }
+    }
 
-	public void setspeed(int speed) {
-		setspeed(speed, true);
-	}
+    public void setspeed(int speed) {
+        setspeed(speed, true);
+    }
 
-	public int getspeed() {
-		return pspd;
-	}
+    public int getspeed() {
+        return pspd;
+    }
 
-	boolean first = true;
+    boolean first = true;
 
-	@Override
-	public void update(long dt) {
-		if (first) {
-			setspeed(2, true);
-			first = false;
-		}
-	}
+    @Override
+    public void update(long dt) {
+        if (first) {
+            setspeed(2, true);
+            first = false;
+        }
+    }
 
-	public boolean mousewheel(Coord c, int amount) {
-		if (max >= 0)
-			setspeed((cur + max + 1 + amount) % (max + 1), true);
-		return (true);
-	}
+    public boolean mousewheel(Coord c, int amount) {
+        if (max >= 0)
+            setspeed((cur + max + 1 + amount) % (max + 1), true);
+        return (true);
+    }
 }

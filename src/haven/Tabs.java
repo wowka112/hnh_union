@@ -26,7 +26,8 @@
 
 package haven;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class Tabs {
     private Coord c, sz;
@@ -35,50 +36,51 @@ public class Tabs {
     public Collection<Tab> tabs = new LinkedList<Tab>();
 
     public Tabs(Coord c, Coord sz, Widget parent) {
-	this.c = c;
-	this.sz = sz;
-	this.parent = parent;
+        this.c = c;
+        this.sz = sz;
+        this.parent = parent;
     }
 
     public class Tab extends Widget {
-	public TabButton btn;
-	
-	public Tab() {
-	    super(Tabs.this.c, Tabs.this.sz, Tabs.this.parent);
-	    if(curtab == null)
-		curtab = this;
-	    else
-		hide();
-	    tabs.add(this);
-	}
-	
-	public Tab(Coord bc, int bw, String text) {
-	    this();
-	    this.btn = new TabButton(bc, bw, text, this);
-	}
+        public TabButton btn;
+
+        public Tab() {
+            super(Tabs.this.c, Tabs.this.sz, Tabs.this.parent);
+            if (curtab == null)
+                curtab = this;
+            else
+                hide();
+            tabs.add(this);
+        }
+
+        public Tab(Coord bc, int bw, String text) {
+            this();
+            this.btn = new TabButton(bc, bw, text, this);
+        }
     }
 
     public class TabButton extends Button {
-	public final Tab tab;
+        public final Tab tab;
 
-	private TabButton(Coord c, Integer w, String text, Tab tab) {
-	    super(c, w, Tabs.this.parent, text);
-	    this.tab = tab;
-	}
+        private TabButton(Coord c, Integer w, String text, Tab tab) {
+            super(c, w, Tabs.this.parent, text);
+            this.tab = tab;
+        }
 
-	public void click() {
-	    showtab(tab);
-	}
+        public void click() {
+            showtab(tab);
+        }
     }
 
     public void showtab(Tab tab) {
-	Tab old = curtab;
-	if(old != null)
-	    old.hide();
-	if((curtab = tab) != null)
-	    curtab.show();
-	changed(old, tab);
+        Tab old = curtab;
+        if (old != null)
+            old.hide();
+        if ((curtab = tab) != null)
+            curtab.show();
+        changed(old, tab);
     }
-    
-    public void changed(Tab from, Tab to) {}
+
+    public void changed(Tab from, Tab to) {
+    }
 }

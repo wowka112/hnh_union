@@ -26,8 +26,9 @@
 
 package haven;
 
-import java.util.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ConsoleHost extends Widget {
     public static Text.Foundry cmdfoundry = new Text.Foundry(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12), new java.awt.Color(245, 222, 179));
@@ -36,97 +37,97 @@ public abstract class ConsoleHost extends Widget {
     private List<String> history = new ArrayList<String>();
     private int hpos = history.size();
     private String hcurrent;
-    
-    private class CommandLine extends LineEdit {
-	private CommandLine() {
-	    super();
-	}
-	
-	private CommandLine(String line) {
-	    super(line);
-	}
 
-	private void cancel() {
-	    cmdline = null;
-	    ui.grabkeys(null);
-	}
-	
-	protected void done(String line) {
-	    history.add(line);
-	    try {
-		ui.cons.run(line);
-	    } catch(Exception e) {
-		ui.cons.out.println(e.getMessage());
-		error(e.getMessage());
-	    }
-	    cancel();
-	}
-	
-	public boolean key(char c, int code, int mod) {
-	    if(c == 27) {
-		cancel();
-	    } else if((c == 8) && (mod == 0) && (line.length() == 0) && (point == 0)) {
-		cancel();
-	    } else if(code == KeyEvent.VK_UP) {
-		if(hpos > 0) {
-		    if(hpos == history.size())
-			hcurrent = line;
-		    cmdline = new CommandLine(history.get(--hpos));
-		}
-	    } else if(code == KeyEvent.VK_DOWN) {
-		if(hpos < history.size()) {
-		    if(++hpos == history.size())
-			cmdline = new CommandLine(hcurrent);
-		    else
-			cmdline = new CommandLine(history.get(hpos));
-		}
-	    } else {
-		return(super.key(c, code, mod));
-	    }
-	    return(true);
-	}
+    private class CommandLine extends LineEdit {
+        private CommandLine() {
+            super();
+        }
+
+        private CommandLine(String line) {
+            super(line);
+        }
+
+        private void cancel() {
+            cmdline = null;
+            ui.grabkeys(null);
+        }
+
+        protected void done(String line) {
+            history.add(line);
+            try {
+                ui.cons.run(line);
+            } catch (Exception e) {
+                ui.cons.out.println(e.getMessage());
+                error(e.getMessage());
+            }
+            cancel();
+        }
+
+        public boolean key(char c, int code, int mod) {
+            if (c == 27) {
+                cancel();
+            } else if ((c == 8) && (mod == 0) && (line.length() == 0) && (point == 0)) {
+                cancel();
+            } else if (code == KeyEvent.VK_UP) {
+                if (hpos > 0) {
+                    if (hpos == history.size())
+                        hcurrent = line;
+                    cmdline = new CommandLine(history.get(--hpos));
+                }
+            } else if (code == KeyEvent.VK_DOWN) {
+                if (hpos < history.size()) {
+                    if (++hpos == history.size())
+                        cmdline = new CommandLine(hcurrent);
+                    else
+                        cmdline = new CommandLine(history.get(hpos));
+                }
+            } else {
+                return (super.key(c, code, mod));
+            }
+            return (true);
+        }
     }
 
     public ConsoleHost(Coord c, Coord sz, Widget parent) {
-	super(c, sz, parent);
+        super(c, sz, parent);
     }
-    
+
     public ConsoleHost(UI ui, Coord c, Coord sz) {
-	super(ui, c, sz);
+        super(ui, c, sz);
     }
-    
+
     public void drawcmd(GOut g, Coord c) {
-	if(cmdline != null) {
-	    if((cmdtext == null) || (cmdtext.text != cmdline.line))
-		cmdtext = cmdfoundry.render(":" + cmdline.line);
-	    g.image(cmdtext.tex(), c);
-	    int lx = cmdtext.advance(cmdline.point + 1);
-	    g.line(c.add(lx + 1, 2), c.add(lx + 1, 14), 1);
-	}
+        if (cmdline != null) {
+            if ((cmdtext == null) || (cmdtext.text != cmdline.line))
+                cmdtext = cmdfoundry.render(":" + cmdline.line);
+            g.image(cmdtext.tex(), c);
+            int lx = cmdtext.advance(cmdline.point + 1);
+            g.line(c.add(lx + 1, 2), c.add(lx + 1, 14), 1);
+        }
     }
-    
+
     public void entercmd() {
-	ui.grabkeys(this);
-	hpos = history.size();
-	cmdline = new CommandLine();
+        ui.grabkeys(this);
+        hpos = history.size();
+        cmdline = new CommandLine();
     }
 
     public boolean type(char ch, KeyEvent ev) {
-	if(cmdline == null) {
-	    return(super.type(ch, ev));
-	} else {
-	    cmdline.key(ev);
-	    return(true);
-	}
+        if (cmdline == null) {
+            return (super.type(ch, ev));
+        } else {
+            cmdline.key(ev);
+            return (true);
+        }
     }
-    
+
     public boolean keydown(KeyEvent ev) {
-	if(cmdline != null) {
-	    cmdline.key(ev);
-	    return(true);
-	}
-	return(super.keydown(ev));
+        if (cmdline != null) {
+            cmdline.key(ev);
+            return (true);
+        }
+        return (super.keydown(ev));
     }
-    
+
     public abstract void error(String msg);
 }

@@ -35,12 +35,12 @@ public class MapMod extends Window implements MapView.Grabber {
     Label text;
     Coord sc, c1, c2;
     TextEntry tilenum;
-    public final static String fmt = "Selected: %d" + (char)(0xD7) + "%d";
-    
+    public final static String fmt = "Selected: %d" + (char) (0xD7) + "%d";
+
     static {
         Widget.addtype("mapmod", new WidgetFactory() {
             public Widget create(Coord c, Widget parent, Object[] args) {
-                return(new MapMod(c, parent));
+                return (new MapMod(c, parent));
             }
         });
     }
@@ -60,47 +60,47 @@ public class MapMod extends Window implements MapView.Grabber {
 
     public void destroy() {
         ui.mapview.disol(17);
-        if(walkmod)
+        if (walkmod)
             ui.mapview.release(this);
-        if(ol != null)
+        if (ol != null)
             ol.destroy();
         super.destroy();
     }
 
-	
+
     public void mmousedown(Coord mc, int button) {
         Coord tc = mc.div(MCache.tileSize);
-        if(ol != null)
+        if (ol != null)
             ol.destroy();
         ol = map.new Overlay(tc, tc, 1 << 17);
         sc = tc;
         dm = true;
         ui.grabmouse(ui.mapview);
     }
-	
+
     public void mmouseup(Coord mc, int button) {
         dm = false;
         ui.grabmouse(null);
     }
-	
+
     public void mmousemove(Coord mc) {
-        if(!dm)
+        if (!dm)
             return;
         Coord tc = mc.div(MCache.tileSize);
         Coord c1 = new Coord(0, 0), c2 = new Coord(0, 0);
-        if(tc.x < sc.x) {
+        if (tc.x < sc.x) {
             c1.x = tc.x;
             c2.x = sc.x;
         } else {
             c1.x = sc.x;
-            c2.x = tc.x;			
+            c2.x = tc.x;
         }
-        if(tc.y < sc.y) {
+        if (tc.y < sc.y) {
             c1.y = tc.y;
             c2.y = sc.y;
         } else {
             c1.y = sc.y;
-            c2.y = tc.y;			
+            c2.y = tc.y;
         }
         ol.update(c1, c2);
         this.c1 = c1;
@@ -109,25 +109,25 @@ public class MapMod extends Window implements MapView.Grabber {
     }
 
     public void wdgmsg(Widget sender, String msg, Object... args) {
-        if(sender == btn) {
-            if((c1 != null) && (c2 != null))
+        if (sender == btn) {
+            if ((c1 != null) && (c2 != null))
                 wdgmsg("mod", c1, c2);
             return;
         }
-        if(sender == cbox) {
-            walkmod = (Boolean)args[0];
-            if(!walkmod) {
+        if (sender == cbox) {
+            walkmod = (Boolean) args[0];
+            if (!walkmod) {
                 ui.mapview.grab(this);
             } else {
-                if(ol != null)
+                if (ol != null)
                     ol.destroy();
                 ol = null;
                 ui.mapview.release(this);
             }
-            wdgmsg("wm", walkmod?1:0);
+            wdgmsg("wm", walkmod ? 1 : 0);
             return;
         }
-        if(sender == tilenum) {
+        if (sender == tilenum) {
             wdgmsg("tnum", Integer.parseInt(tilenum.text));
             return;
         }

@@ -30,20 +30,21 @@ import java.net.URL;
 
 public abstract class WebBrowser {
     public static WebBrowser self;
-    
-    public WebBrowser() {}
-    
+
+    public WebBrowser() {
+    }
+
     public abstract void show(URL url);
 
     static {
-	Console.setscmd("browse", new Console.Command() {
-		public void run(Console cons, String[] args) throws Exception {
-		    if(WebBrowser.self != null) {
-			WebBrowser.self.show(new java.net.URL(args[1]));
-		    } else {
-			throw(new Exception("No web browser available"));
-		    }
-		}
-	    });
+        Console.setscmd("browse", new Console.Command() {
+            public void run(Console cons, String[] args) throws Exception {
+                if (WebBrowser.self != null) {
+                    WebBrowser.self.show(new java.net.URL(args[1]));
+                } else {
+                    throw (new Exception("No web browser available"));
+                }
+            }
+        });
     }
 }
