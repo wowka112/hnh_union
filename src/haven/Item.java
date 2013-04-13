@@ -347,6 +347,15 @@ public class Item extends Widget implements DTarget {
         return tt;
     }
 
+    public int getLP() {
+        if (curio_stat != null && qmult > 0) {
+            if (UI.instance.wnd_char != null)
+                return (int) Math.round(curio_stat.baseLP * qmult * UI.instance.wnd_char.getExpMode());
+        }
+
+        return 0;
+    }
+
     private String lngTip() {
         String tt = shrtTip();
         if (tt != null) {
