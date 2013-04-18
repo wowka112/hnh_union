@@ -1184,7 +1184,7 @@ public class MapView extends Widget implements DTarget, Console.Directory {
         g.chcolor();
     }
 
-    private void drawcurioses(GOut g) {
+    private void drawCuriosities(GOut g) {
         try {
             String name;
             g.chcolor(255, 153, 51, 96);
@@ -1493,7 +1493,7 @@ public class MapView extends Widget implements DTarget, Console.Directory {
         if (Config.showBeast) {
             drawBeastRadius(g);
         }
-        drawcurioses(g);
+        drawCuriosities(g);
         drawtracking(g);
 
         if (curf != null)
