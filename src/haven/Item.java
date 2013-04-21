@@ -278,8 +278,20 @@ public class Item extends Widget implements DTarget {
     private void calcFEP() {
         Map<String, Float> fep;
         String name = name();
+        if (name == null) {
+            return;
+        }
+        if (name.equals("Ring of Brodgar")) {
+            if (res.get().name.equals("gfx/invobjs/bread-brodgar")) {
+                name = "Ring of Brodgar (Baking)";
+            }
+            if (res.get().name.equals("gfx/invobjs/feast-rob")) {
+                name = "Ring of Brodgar (Seafood)";
+            }
+        }
+        name = name.toLowerCase();
         boolean isItem = false;
-        if ((name != null) && (fep = Config.FEPMap.get(name().toLowerCase())) != null) {
+        if ((fep = Config.FEPMap.get(name)) != null) {
             if (fep.containsKey("isItem")) {
                 isItem = true;
             }
