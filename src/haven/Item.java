@@ -278,11 +278,23 @@ public class Item extends Widget implements DTarget {
     private void calcFEP() {
         Map<String, Float> fep;
         String name = name();
+        boolean isItem = false;
         if ((name != null) && (fep = Config.FEPMap.get(name().toLowerCase())) != null) {
+            if (fep.containsKey("isItem")) {
+                isItem = true;
+            }
             FEP = "\n";
             for (String key : fep.keySet()) {
-                FEP += String.format("%s:%.1f ", key, (float) fep.get(key)
-                        * qmult);
+                float val = (float) (fep.get(key) * qmult);
+                if (key.equals("isItem")) {
+                    continue;
+                }
+                if (isItem) {
+                    val = (float) Math.floor(val);
+                    FEP += String.format("%s:%.0f ", key, val);
+                } else {
+                    FEP += String.format("%s:%.1f ", key, val);
+                }
             }
         }
     }
