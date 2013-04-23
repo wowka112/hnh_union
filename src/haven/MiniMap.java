@@ -57,7 +57,7 @@ public class MiniMap extends Widget {
     public static final Resource plx = Resource.load("gfx/hud/mmap/x");
     public Coord off, doff;
     boolean hidden = false, grid = false;
-    ;
+
     MapView mv;
     boolean dm = false;
     public int scale = 4;
