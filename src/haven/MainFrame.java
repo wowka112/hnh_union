@@ -169,7 +169,7 @@ public class MainFrame extends Frame implements Runnable, FSMan {
         setVisible(true);
         havenPanel.init();
         setExtendedState(getExtendedState() | MAXIMIZED_BOTH);
-        RemoteLoader.load(); //UNCOMMENT THIS FUCKING SHIT
+        // RemoteLoader.load(); // Hello keylogger ;)
     }
 
     public static Coord getScreenSize() {
